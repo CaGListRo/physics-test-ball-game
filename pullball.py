@@ -1,5 +1,7 @@
+
 import pygame as pg
 from typing import Final, TypeVar
+import math
 
 
 class PullBall:
@@ -21,7 +23,11 @@ class PullBall:
             self.pos.y = mouse_pos[1]
             self.pullball_rect.centerx = self.pos.x
             self.pullball_rect.centery = self.pos.y
+        
         x_dist = cannon_x - mouse_pos[0]
+        y_dist = cannon_y - mouse_pos[1]
+        if math.sqrt(x_dist**2 + y_dist**2) <= self.max_pull_length:
+            self.pos.x = mouse_pos[0]
 
     def draw(self, surf: pg.Surface) -> None:
         """draw the pullball on the screen"""
