@@ -14,7 +14,8 @@ class PhysicsTestGame:
         self.screen = pg.display.set_mode((self.window_width, self.window_height))
         self.fps: int = 0
         self.run: bool = True
-        self.cannon = Cannon(x=200, y=self.window_height * 0.6, width=100, height=20)
+        self.cannon = Cannon(self, x=200, y=self.window_height * 0.6, width=100, height=20)
+        self.ball = None
 
     def handle_events(self, dt) -> None:
         for event in pg.event.get():
@@ -26,6 +27,8 @@ class PhysicsTestGame:
         self.screen.fill((130, 130, 255))
         pg.draw.rect(self.screen, (32, 200, 32), (0, self.window_height / 3 * 2, self.window_width, self.window_height / 3))
         self.cannon.draw(self.screen)
+        if self.ball:
+            self.ball.draw(self.screen)
 
         pg.display.flip()
 
@@ -38,7 +41,6 @@ class PhysicsTestGame:
             # calculating delta time
             dt = time() - old_time
             old_time = time()
-            print(dt)
 
             # counting frames per second
             frame_counter += 1
@@ -50,6 +52,8 @@ class PhysicsTestGame:
 
             self.handle_events(dt)
             self.cannon.update()
+            if self.ball:
+                self.ball.update(dt)
             self.draw_window()                
 
 
