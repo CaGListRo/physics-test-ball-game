@@ -25,13 +25,12 @@ class PullBall:
         if self.pullball_rect.collidepoint(mouse_pos) and pg.mouse.get_pressed()[0]:
             self.selected = True
         elif not pg.mouse.get_pressed()[0] and self.selected:
-            speed = (math.sqrt((cannon_x - self.pos.x)**2 + (cannon_y - self.pos.y)**2) - self.cannon_lenght / 2) * 10
-            x_direction = 1 * math.cos(math.radians(self.angle_alpha))
-            y_direction = 1 * math.sin(math.radians(self.angle_alpha))
-            direction = (x_direction, y_direction)
-            self.game.ball = Ball(x=cannon_x, y=cannon_y, radius=self.radius, color="blue", direction=direction, speed=speed)
+            pull_ball_pulled_length: float = (math.sqrt((cannon_x - self.pos.x)**2 + (cannon_y - self.pos.y)**2) - self.cannon_lenght / 2)*10
+            x_speed: float = 1 * math.cos(math.radians(self.angle_alpha)) * pull_ball_pulled_length
+            y_speed: float = 1 * math.sin(math.radians(self.angle_alpha)) * pull_ball_pulled_length
+            speed: tuple[float] = (x_speed, y_speed)
+            self.game.ball = Ball(self.game, cannon_x=cannon_x, cannon_y=cannon_y, radius=self.radius, color="blue", speed=speed)
             self.selected = False
-            print(speed)
             
         if self.selected:
             mouse_pull_x = cannon_x - mouse_pos[0]  # distance between the point of reference (turning point of the cannon)

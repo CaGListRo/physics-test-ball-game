@@ -26,10 +26,10 @@ class PhysicsTestGame:
         pg.display.set_caption(f"    Physics Test Game     FPS:{self.fps}")
         self.screen.fill((130, 130, 255))
         pg.draw.rect(self.screen, (32, 200, 32), (0, self.window_height / 3 * 2, self.window_width, self.window_height / 3))
-        self.cannon.draw(self.screen)
         if self.ball:
             self.ball.draw(self.screen)
-
+        self.cannon.draw(self.screen)
+        
         pg.display.flip()
 
     def main(self) -> None:
