@@ -29,7 +29,7 @@ class PullBall:
             x_speed: float = 1 * math.cos(math.radians(self.angle_alpha)) * pull_ball_pulled_length
             y_speed: float = 1 * math.sin(math.radians(self.angle_alpha)) * pull_ball_pulled_length
             speed: tuple[float] = (x_speed, y_speed)
-            self.game.ball = Ball(self.game, cannon_x=cannon_x, cannon_y=cannon_y, radius=self.radius, color="blue", speed=speed)
+            self.game.balls.append(Ball(self.game, cannon_x=cannon_x, cannon_y=cannon_y, radius=self.radius, color="blue", speed=speed, rebounce=0.8))
             self.selected = False
             
         if self.selected:
