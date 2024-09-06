@@ -23,7 +23,7 @@ class Cannon:
         self.turret: pg.Rect = pg.Rect(self.x - turret_width / 2, self.y - turret_width / 2, turret_width, turret_height)
         # pullball settings
         self.pullball_radius: int = int(self.height * 0.45)
-        self.pullball = PullBall(self.game, x=(self.x - self.width / 2 - self.pullball_radius), y=self.y, radius=int(self.height * 0.45), max_pull_length=int(self.width * 0.8), cannon_lenght=self.width)
+        self.pullball = PullBall(self.game, x=(self.x - self.width / 2 - self.pullball_radius), y=self.y, radius=int(self.height * 0.45), max_pull_length=int(self.width * 0.8), cannon_length=self.width)
         self.max_pull_length: int = int(width * 0.8)
 
     def update(self) -> None:

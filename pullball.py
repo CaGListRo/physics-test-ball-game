@@ -5,12 +5,12 @@ import math
 
 
 class PullBall:
-    def __init__(self, game, x: int, y: int, radius: int, max_pull_length: int, cannon_lenght: int) -> None:
+    def __init__(self, game, x: int, y: int, radius: int, max_pull_length: int, cannon_length: int) -> None:
         self.game = game
         self.pos: pg.Vector2 = pg.Vector2(x=x, y=y)
         self.radius: int = radius 
-        self.max_pull_length: int = max_pull_length + cannon_lenght / 2
-        self.cannon_lenght: int = cannon_lenght
+        self.max_pull_length: int = max_pull_length + cannon_length / 2
+        self.cannon_length: int = cannon_length
         self.selected: bool = False
         self.pullball_image: pg.Surface = pg.image.load("pullball image.png").convert_alpha()
         new_image_width_height = self.pullball_image.get_width() / 2
@@ -25,12 +25,16 @@ class PullBall:
         if self.pullball_rect.collidepoint(mouse_pos) and pg.mouse.get_pressed()[0]:
             self.selected = True
         elif not pg.mouse.get_pressed()[0] and self.selected:
-            pull_ball_pulled_length: float = (math.sqrt((cannon_x - self.pos.x)**2 + (cannon_y - self.pos.y)**2) - self.cannon_lenght / 2)*10
+            pull_ball_pulled_length: float = (math.sqrt((cannon_x - self.pos.x)**2 + (cannon_y - self.pos.y)**2) - self.cannon_length / 2)*10
             x_speed: float = 1 * math.cos(math.radians(self.angle_alpha)) * pull_ball_pulled_length
             y_speed: float = 1 * math.sin(math.radians(self.angle_alpha)) * pull_ball_pulled_length
             speed: tuple[float] = (x_speed, y_speed)
             self.game.balls.append(Ball(self.game, cannon_x=cannon_x, cannon_y=cannon_y, radius=self.radius, color="blue", speed=speed, rebounce=0.8))
             self.selected = False
+            self.pos.x = int(cannon_x - self.cannon_length / 2 * math.cos(math.radians(self.angle_alpha)))
+            self.pos.y = int(cannon_y - self.cannon_length / 2 * math.sin(math.radians(self.angle_alpha)))
+            self.pullball_rect.centerx = self.pos.x
+            self.pullball_rect.centery = self.pos.y
             
         if self.selected:
             mouse_pull_x = cannon_x - mouse_pos[0]  # distance between the point of reference (turning point of the cannon)

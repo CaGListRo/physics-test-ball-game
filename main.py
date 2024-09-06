@@ -56,7 +56,8 @@ class PhysicsTestGame:
             if len(self.balls) > 0:
                 for ball in self.balls:
                     ball.update(dt)
-            self.draw_window()                
+            self.draw_window()
+            print(self.balls)            
 
 
 pg.quit()

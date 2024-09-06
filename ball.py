@@ -25,6 +25,9 @@ class Ball:
         self.pos.x += self.speed.x * dt
         self.pos.y += self.speed.y * dt
 
+        if self.pos.x < 0 - self.radius or self.pos.x > self.game.window_width + self.radius:
+            self.game.balls.remove(self)
+
         if self.pos.y + self.radius >= 800 and self.speed.y > 0:
             self.speed.y = -self.speed.y * self.rebounce
 
