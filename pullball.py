@@ -3,10 +3,21 @@ import pygame as pg
 from typing import Final, TypeVar
 import math
 
+Game = TypeVar("Game")
 
 class PullBall:
-    def __init__(self, game, x: int, y: int, radius: int, max_pull_length: int, cannon_length: int) -> None:
-        self.game = game
+    def __init__(self, game: Game, x: int, y: int, radius: int, max_pull_length: int, cannon_length: int) -> None:
+        """
+        Initialize a pullball object.
+        Args:
+        game (Game): The game object.
+        x (int): The x-coordinate of the pullball.
+        y (int): The y-coordinate of the pullball.
+        radius (int): The radius of the pullball.
+        max_pull_length (int): The maximum length of the pull.
+        cannon_length (int): The length of the cannon.
+        """
+        self.game: Game = game
         self.pos: pg.Vector2 = pg.Vector2(x=x, y=y)
         self.radius: int = radius 
         self.max_pull_length: int = max_pull_length + cannon_length / 2
@@ -25,14 +36,16 @@ class PullBall:
         if self.pullball_rect.collidepoint(mouse_pos) and pg.mouse.get_pressed()[0]:
             self.selected = True
         elif not pg.mouse.get_pressed()[0] and self.selected:
+            # calculating the speed vector for the bacll(projectile)
             pull_ball_pulled_length: float = (math.sqrt((cannon_x - self.pos.x)**2 + (cannon_y - self.pos.y)**2) - self.cannon_length / 2)*10
+            #calculating the x and y speed out of the speed vector
             x_speed: float = 1 * math.cos(math.radians(self.angle_alpha)) * pull_ball_pulled_length
             y_speed: float = 1 * math.sin(math.radians(self.angle_alpha)) * pull_ball_pulled_length
             speed: tuple[float] = (x_speed, y_speed)
             self.game.balls.append(Ball(self.game, cannon_x=cannon_x, cannon_y=cannon_y, radius=self.radius, color="blue", speed=speed, rebounce=0.8))
             self.selected = False
-            self.pos.x = int(cannon_x - self.cannon_length / 2 * math.cos(math.radians(self.angle_alpha)))
-            self.pos.y = int(cannon_y - self.cannon_length / 2 * math.sin(math.radians(self.angle_alpha)))
+            self.pos.x = int(cannon_x - (self.cannon_length / 2 + self.radius) * math.cos(math.radians(self.angle_alpha)))
+            self.pos.y = int(cannon_y - (self.cannon_length / 2 + self.radius) * math.sin(math.radians(self.angle_alpha)))
             self.pullball_rect.centerx = self.pos.x
             self.pullball_rect.centery = self.pos.y
             
@@ -51,7 +64,6 @@ class PullBall:
                 
             self.pullball_rect.centerx = self.pos.x
             self.pullball_rect.centery = self.pos.y
-        print(self.angle_alpha)
         return -self.angle_alpha
 
     def draw(self, surf: pg.Surface) -> None:

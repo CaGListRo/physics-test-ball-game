@@ -7,14 +7,15 @@ from typing import Final, TypeVar
 
 
 class PhysicsTestGame:
+    WINDOW_WIDTH: Final[int] = 1600
+    WINDOW_HEIGHT: Final[int] = 900
+
     def __init__(self) -> None:
         pg.init()
-        self.window_width: int = 1600
-        self.window_height: int = 900
-        self.screen = pg.display.set_mode((self.window_width, self.window_height))
+        self.screen = pg.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         self.fps: int = 0
         self.run: bool = True
-        self.cannon = Cannon(self, x=200, y=self.window_height * 0.6, width=100, height=20)
+        self.cannon = Cannon(self, x=200, y=self.WINDOW_HEIGHT * 0.6, width=100, height=20)
         self.balls: list = []
 
     def handle_events(self, dt) -> None:
@@ -25,7 +26,7 @@ class PhysicsTestGame:
     def draw_window(self) -> None:
         pg.display.set_caption(f"    Physics Test Game     FPS:{self.fps}")
         self.screen.fill((130, 130, 255))
-        pg.draw.rect(self.screen, (32, 200, 32), (0, self.window_height / 3 * 2, self.window_width, self.window_height / 3))
+        pg.draw.rect(self.screen, (32, 200, 32), (0, self.WINDOW_HEIGHT / 3 * 2, self.WINDOW_WIDTH, self.WINDOW_HEIGHT / 3))
         if len(self.balls) > 0:
             for ball in self.balls:
                 ball.draw(self.screen)
@@ -56,8 +57,7 @@ class PhysicsTestGame:
             if len(self.balls) > 0:
                 for ball in self.balls:
                     ball.update(dt)
-            self.draw_window()
-            print(self.balls)            
+            self.draw_window()          
 
 
 pg.quit()
