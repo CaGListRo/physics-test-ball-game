@@ -1,7 +1,9 @@
 from cannon import Cannon
+from collision_objekt import CollisionRect
 
 import pygame as pg
 from time import time
+from random import randint
 from typing import Final, TypeVar
 
 
@@ -11,14 +13,27 @@ class PhysicsTestGame:
     WINDOW_HEIGHT: Final[int] = 900
 
     def __init__(self) -> None:
+        """ The initializer of the main game class. """
         pg.init()
         self.screen = pg.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         self.fps: int = 0
         self.run: bool = True
         self.cannon = Cannon(self, x=200, y=self.WINDOW_HEIGHT * 0.6, width=100, height=20)
         self.balls: list = []
+        self.rects: list = []
+        self.create_rects()
+    
+    def create_rects(self) -> None:
+        """ Creates a list of rectangles with random positions and sizes. """
+        for _ in range(10):
+            x_pos = randint(500, self.WINDOW_WIDTH)
+            y_pos = randint(0, self.WINDOW_HEIGHT)
+            rect_width = randint(50, 200)
+            rect_height = randint(50, 200)
+            rect = CollisionRect(game=self, position=(x_pos, y_pos), size=(rect_width, rect_height))
+            self.rects.append(rect)
 
-    def handle_events(self, dt) -> None:
+    def handle_events(self) -> None:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.run = False
@@ -31,6 +46,8 @@ class PhysicsTestGame:
             for ball in self.balls:
                 ball.draw(self.screen)
         self.cannon.draw(self.screen)
+        for rect in self.rects:
+            rect.draw(self.screen)
         
         pg.display.flip()
 
@@ -52,7 +69,7 @@ class PhysicsTestGame:
                 frame_counter = 0
                 frame_timer = 0
 
-            self.handle_events(dt)
+            self.handle_events()
             self.cannon.update()
             if len(self.balls) > 0:
                 for ball in self.balls:
