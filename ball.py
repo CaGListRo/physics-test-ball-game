@@ -15,6 +15,10 @@ class Ball:
         self.rebounce: float = rebounce
         self.airborne: bool = False
         self.gravity: float = 0.9
+        # calculating the length of one side of the rect(square): a = side length, c = hypotenuse
+        # c = sqrt(a² + a²) = sqrt(2a²) = a * sqrt(2)  =>  a = c / sqrt(2)
+        self.rect_length: int = int(self.radius * 2 / sqrt(2))
+        self.rect: pg.Rect = pg.Rect(self.pos.x - self.rect_length / 2, self.pos.y - self.rect_length / 2, self.rect_length, self.rect_length)
 
     def update(self, dt) -> None:
         if not self.airborne:
@@ -24,6 +28,8 @@ class Ball:
             self.speed.y += self.gravity
         self.pos.x += self.speed.x * dt
         self.pos.y += self.speed.y * dt
+        self.rect.x = self.pos.x - self.rect_length / 2
+        self.rect.y = self.pos.y - self.rect_length / 2
 
         if self.pos.x < 0 - self.radius or self.pos.x > self.game.WINDOW_WIDTH + self.radius:
             self.game.balls.remove(self)

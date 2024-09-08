@@ -15,6 +15,7 @@ class CollisionRect:
         self.game: Game = game
         self.position: Final[tuple[int]] = position
         self.size: Final[tuple[int]] = size
+        self.rect: Final[pg.Rect] = pg.Rect(self.position, self.size)
 
     def draw(self, surf: pg.Surface) -> None:
         """
@@ -22,4 +23,4 @@ class CollisionRect:
         Args:
         surf (pg.Surface): The surface to draw on.
         """
-        pg.draw.rect(surf, (50, 50, 50), pg.Rect(self.position, self.size))
+        pg.draw.rect(surf, (50, 50, 50), self.rect)

@@ -33,6 +33,30 @@ class PhysicsTestGame:
             rect = CollisionRect(game=self, position=(x_pos, y_pos), size=(rect_width, rect_height))
             self.rects.append(rect)
 
+    def check_collision(self) -> None:
+        """ Checks for collisions between the balls and the rectangles. """
+        for ball in self.balls:
+            for rect in self.rects:
+                if ball.rect.colliderect(rect.rect):
+                    if ball.speed.x > 0:
+                        delta_x = ball.rect.right - rect.rect.left
+                    else:
+                        delta_x = rect.rect.right - ball.rect.left
+                    if ball.speed.y > 0:
+                        delta_y = ball.rect.bottom - rect.rect.top
+                    else:
+                        delta_y = rect.rect.bottom - ball.rect.top
+                    
+                    if abs(delta_x - delta_y) <= 10:
+                        ball.speed.x = -ball.speed.x * ball.rebounce
+                        ball.speed.y = -ball.speed.y * ball.rebounce
+                    
+                    elif delta_x > delta_y:
+                        ball.speed.y = -ball.speed.y * ball.rebounce
+                    elif delta_y > delta_x:
+                        ball.speed.x = -ball.speed.x * ball.rebounce
+                    
+
     def handle_events(self) -> None:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -74,6 +98,7 @@ class PhysicsTestGame:
             if len(self.balls) > 0:
                 for ball in self.balls:
                     ball.update(dt)
+                self.check_collision()
             self.draw_window()          
 
 
