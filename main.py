@@ -24,38 +24,19 @@ class PhysicsTestGame:
         self.create_rects()
     
     def create_rects(self) -> None:
-        """ Creates a list of rectangles with random positions and sizes. """
-        for _ in range(10):
-            x_pos = randint(500, self.WINDOW_WIDTH)
-            y_pos = randint(0, self.WINDOW_HEIGHT)
-            rect_width = randint(50, 200)
-            rect_height = randint(50, 200)
-            rect = CollisionRect(game=self, position=(x_pos, y_pos), size=(rect_width, rect_height))
-            self.rects.append(rect)
+        """ Creates a list of rectangles. """
 
-    def check_collision(self) -> None:
-        """ Checks for collisions between the balls and the rectangles. """
-        for ball in self.balls:
-            for rect in self.rects:
-                if ball.rect.colliderect(rect.rect):
-                    if ball.speed.x > 0:
-                        delta_x = ball.rect.right - rect.rect.left
-                    else:
-                        delta_x = rect.rect.right - ball.rect.left
-                    if ball.speed.y > 0:
-                        delta_y = ball.rect.bottom - rect.rect.top
-                    else:
-                        delta_y = rect.rect.bottom - ball.rect.top
-                    
-                    if abs(delta_x - delta_y) <= 10:
-                        ball.speed.x = -ball.speed.x * ball.rebounce
-                        ball.speed.y = -ball.speed.y * ball.rebounce
-                    
-                    elif delta_x > delta_y:
-                        ball.speed.y = -ball.speed.y * ball.rebounce
-                    elif delta_y > delta_x:
-                        ball.speed.x = -ball.speed.x * ball.rebounce
-                    
+        # "backwall"
+        # rect = CollisionRect(game=self, position=(self.WINDOW_WIDTH -20, 0), size=(10, self.WINDOW_HEIGHT))
+        self.rects.append(CollisionRect(game=self, position=(self.WINDOW_WIDTH -20, 0), size=(10, self.WINDOW_HEIGHT)))
+        # middle wall
+        # rect = CollisionRect(game=self, position=(self.WINDOW_WIDTH / 2, self.WINDOW_HEIGHT / 2), size=(10, self.WINDOW_HEIGHT / 2))
+        self.rects.append(CollisionRect(game=self, position=(self.WINDOW_WIDTH / 2, self.WINDOW_HEIGHT / 2), size=(10, self.WINDOW_HEIGHT / 2)))
+        # other walls
+        # rect = CollisionRect(game=self, position=(self.WINDOW_WIDTH / 2, self.WINDOW_HEIGHT / 2), size=(self.WINDOW_WIDTH / 3, 10))
+        self.rects.append(CollisionRect(game=self, position=(self.WINDOW_WIDTH / 2, self.WINDOW_HEIGHT / 2), size=(self.WINDOW_WIDTH / 3, 10)))
+        # rect = CollisionRect(game=self, position=(self.WINDOW_WIDTH / 2 + self.WINDOW_WIDTH / 3, self.WINDOW_HEIGHT / 2), size=(10, self.WINDOW_HEIGHT / 4))
+        self.rects.append(CollisionRect(game=self, position=(self.WINDOW_WIDTH / 2 + self.WINDOW_WIDTH / 3, self.WINDOW_HEIGHT / 2), size=(10, self.WINDOW_HEIGHT / 4)))
 
     def handle_events(self) -> None:
         for event in pg.event.get():
@@ -69,6 +50,7 @@ class PhysicsTestGame:
         if len(self.balls) > 0:
             for ball in self.balls:
                 ball.draw(self.screen)
+                # print(ball.speed, ball.pos)
         self.cannon.draw(self.screen)
         for rect in self.rects:
             rect.draw(self.screen)
@@ -98,7 +80,8 @@ class PhysicsTestGame:
             if len(self.balls) > 0:
                 for ball in self.balls:
                     ball.update(dt)
-                self.check_collision()
+                    # print(ball.pos)
+
             self.draw_window()          
 
 

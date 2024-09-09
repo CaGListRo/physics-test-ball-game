@@ -9,7 +9,7 @@ class CollisionRect:
         Initialize a collision rectangle.
         Args:
         game: The game object.
-        position (tuple(int, int)): The position of the rectangle.
+        position (tuple(int, int)): The position of the top left corner of the rectangle.
         size (tuple(int, int)): The size of the collision rectangle
         """
         self.game: Game = game
