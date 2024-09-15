@@ -40,19 +40,23 @@ class Ball:
                 if self.speed.x > 0:
                     # delta_x is the overlap of the self rect and the collision rect in x direction
                     delta_x = self.ball_rect.right - rect.rect.left
+                    # self.pos.x = rect.rect.left - self.radius
                     self.ball_rect.right = rect.rect.left - 1
-                else:
+                elif self.speed.x < 0:
                     delta_x = rect.rect.right - self.ball_rect.left
+                    # self.pos.x = rect.rect.right + self.radius
                     self.ball_rect.left = rect.rect.right + 1
                     
                 if self.speed.y > 0:
                     # delta_y is the overlap of the self rect and the collision rect in y direction
                     delta_y = self.ball_rect.bottom - rect.rect.top
+                    # self.pos.y = rect.rect.top - self.radius
                     self.ball_rect.bottom = rect.rect.top - 1
-                else:
+                elif self.speed.y < 0:
                     delta_y = rect.rect.bottom - self.ball_rect.top
+                    # self.pos.y = rect.rect.bottom + self.radius
                     self.ball_rect.top = rect.rect.bottom + 1
-                print(delta_x, delta_y)
+
                 
                 
                 if abs(delta_x - delta_y) < 5:
@@ -64,8 +68,8 @@ class Ball:
                 elif delta_y > delta_x:
                     self.speed.x = -self.speed.x * self.rebounce
                 
-                # self.pos.x = self.ball_rect.centerx
-                # self.pos.y = self.ball_rect.centery
+                # self.ball_rect.centerx = self.pos.x
+                # self.ball_rect.centery = self.pos.y
 
     def check_collision_with_ground(self) -> None:
         """ Checks if the ball collides with the ground. """
@@ -79,17 +83,16 @@ class Ball:
         Args:
         dt (float): The time difference between to frames
         """
+        self.pos.x += self.speed.x * dt
+        self.pos.y += self.speed.y * dt
+        self.ball_rect.centerx = self.pos.x
+        self.ball_rect.centery = self.pos.y
 
         if not self.airborne:
             if abs(sqrt((self.pos.x - self.cannon_x)**2 + (self.pos.y - self.cannon_y)**2)) + self.radius > self.game.cannon.width / 2:
                 self.airborne = True
         else:
             self.speed.y += self.gravity
-
-        self.pos.x += self.speed.x * dt
-        self.pos.y += self.speed.y * dt
-        self.ball_rect.centerx = self.pos.x
-        self.ball_rect.centery = self.pos.y
 
         if self.pos.x < 0 - self.radius or self.pos.x > self.game.WINDOW_WIDTH + self.radius:
             self.game.balls.remove(self)
