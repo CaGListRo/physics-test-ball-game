@@ -41,31 +41,37 @@ class Ball:
                     # delta_x is the overlap of the self rect and the collision rect in x direction
                     delta_x = self.ball_rect.right - rect.rect.left
                     # self.pos.x = rect.rect.left - self.radius
-                    self.ball_rect.right = rect.rect.left - 1
+                    # self.ball_rect.right = rect.rect.left - 1
                 elif self.speed.x < 0:
                     delta_x = rect.rect.right - self.ball_rect.left
                     # self.pos.x = rect.rect.right + self.radius
-                    self.ball_rect.left = rect.rect.right + 1
+                    # self.ball_rect.left = rect.rect.right + 1
                     
                 if self.speed.y > 0:
                     # delta_y is the overlap of the self rect and the collision rect in y direction
                     delta_y = self.ball_rect.bottom - rect.rect.top
                     # self.pos.y = rect.rect.top - self.radius
-                    self.ball_rect.bottom = rect.rect.top - 1
+                    # self.ball_rect.bottom = rect.rect.top - 1
                 elif self.speed.y < 0:
                     delta_y = rect.rect.bottom - self.ball_rect.top
                     # self.pos.y = rect.rect.bottom + self.radius
-                    self.ball_rect.top = rect.rect.bottom + 1
-
-                
+                    # self.ball_rect.top = rect.rect.bottom + 1
                 
                 if abs(delta_x - delta_y) < 5:
                     self.speed.x = -self.speed.x * self.rebounce
                     self.speed.y = -self.speed.y * self.rebounce
                 
                 elif delta_x > delta_y:
+                    if self.speed.y > 0:
+                        self.ball_rect.bottom = rect.rect.top - 1
+                    elif self.speed.y < 0:
+                        self.ball_rect.top = rect.rect.bottom + 1
                     self.speed.y = -self.speed.y * self.rebounce
                 elif delta_y > delta_x:
+                    if self.speed.x > 0:
+                        self.ball_rect.right = rect.rect.left - 1
+                    elif self.speed.x < 0:
+                        self.ball_rect.left = rect.rect.right + 1
                     self.speed.x = -self.speed.x * self.rebounce
                 
                 # self.ball_rect.centerx = self.pos.x
